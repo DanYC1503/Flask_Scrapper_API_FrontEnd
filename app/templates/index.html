@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Karmalytics - Buscar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+</head>
+
+<body>
+
+    <header>
+        <div class="icon">🎭</div>
+        <h1>Karmalytics</h1>
+    </header>
+
+    <main class="form-container">
+        <form id="scrapeForm">
+            <label for="keywords">Palabras clave (separadas por coma):</label>
+            <input type="text" id="keywords" name="keywords" required placeholder="elon musk, openai" />
+
+            <label for="limit">Límite de posts por plataforma:</label>
+            <input type="number" id="limit" name="limit" value="10" min="1" max="100" />
+
+            <label for="platform">Red social:</label>
+            <select id="platform" name="platform">
+                <option value="all">Todas</option>
+                <option value="reddit">Reddit</option>
+                <option value="tiktok">TikTok</option>
+                <option value="facebook">Facebook</option>
+            </select>
+
+
+            <button type="submit">Realizar Scraping...</button>
+        </form>
+
+        <div id="resultado"></div>
+
+        <div class="navigation-buttons">
+            <button id="btn-comments" type="button" disabled>Ver Comentarios</button>
+            <button id="btn-analytics" type="button" disabled>Ver Reportes y Gráficos</button>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById("scrapeForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const keywords = document.getElementById("keywords").value
+                .split(",")
+                .map(k => k.trim())
+                .filter(k => k.length > 0);
+            const limit = parseInt(document.getElementById("limit").value);
+            const platform = document.getElementById("platform").value;
+
+            if (keywords.length === 0) {
+                document.getElementById("resultado").innerHTML = "<p>Por favor ingresa al menos una palabra clave.</p>";
+                return;
+            }
+
+            localStorage.setItem("keywords", JSON.stringify(keywords));
+
+            document.getElementById("resultado").innerHTML = "<p>---------Procesando scraping-----------</p>";
+
+            try {
+                const BACKEND_URL = "http://localhost:9090"; 
+                let payload = {};
+                let messages = [];
+
+                if (platform === "reddit") {
+                    payload = { keywords, limit };
+                    const res = await fetch(`${BACKEND_URL}/api/scrape/reddit`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+                    messages.push(data.message);
+                }
+
+                else if (platform === "tiktok") {
+                    for (const keyword of keywords) {
+                        const res = await fetch(`${BACKEND_URL}/api/scrape/tiktok`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ query: keyword, limit })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        messages.push(data.message);
+                    }
+                }
+                else if (platform === "facebook") {
+                    for (const keyword of keywords) {
+                        const res = await fetch(`${BACKEND_URL}/api/scrape/facebook`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ query: keyword, limit })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        messages.push(data.message);
+                    }
+                }
+                else if (platform === "all") {
+                for (const keyword of keywords) {
+                    const res = await fetch(`${BACKEND_URL}/api/scrape/all`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ query: keyword, limit })
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+                    messages.push(data.message);
+                }
+            }
+
+                document.getElementById("resultado").innerHTML = messages.map(m => `<p>${m}</p>`).join("");
+
+                const query = new URLSearchParams({ keywords: keywords.join(",") }).toString();
+                window.location.href = `/comments.html?${query}`;
+            } catch (err) {
+                console.error(err);
+                document.getElementById("resultado").innerHTML = `<p style="color:red;">${err.message}</p>`;
+            }
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const saved = localStorage.getItem("keywords");
+            if (saved) {
+                const keywords = JSON.parse(saved);
+                const query = new URLSearchParams({ keywords: keywords.join(",") }).toString();
+
+                document.querySelector(".navigation-buttons").innerHTML = `
+                    <button onclick="window.location.href='/comments.html?${query}'">Ver Comentarios</button>
+                    <button onclick="window.location.href='/analytics.html?${query}'">Ver Reportes y Gráficos</button>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>
