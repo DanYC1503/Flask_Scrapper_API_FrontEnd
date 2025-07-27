@@ -1,0 +1,593 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar principal */
+.sidebar {
+    background-color: #7a2f2f;
+    color: #f0d4d4;
+    width: 70px;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.sidebar:hover {
+    width: 220px;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+/* Icono superior */
+.sidebar .icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.sidebar:hover .icon {
+    transform: scale(1.1);
+}
+
+/* Título */
+.sidebar h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar:hover h1 {
+    opacity: 1;
+}
+
+/* Navegación */
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+/* Botones de navegación */
+.sidebar nav button {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.sidebar nav button i {
+    min-width: 24px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.sidebar nav button span {
+    display: none;
+}
+
+.sidebar:hover nav button span {
+    display: inline;
+}
+
+/* Hover efecto */
+.sidebar nav button:hover {
+    background-color: #6a2929;
+}
+
+/* Contenido principal */
+.form-container {
+    flex-grow: 1;
+    background-color: white;
+    padding: 40px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Formulario */
+form {
+    width: 100%;
+    max-width: 520px;
+    background: #f9f9f9;
+    padding: 2rem 2.5rem;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    color: #222;
+}
+
+form label {
+    margin-top: 1rem;
+    display: block;
+    font-weight: 600;
+    color: #555;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    color: #222;
+}
+
+form input:focus,
+form select:focus {
+    border-color: #7a2f2f;
+    outline: none;
+    box-shadow: 0 0 6px #b94a4a80;
+}
+
+form button {
+    margin-top: 2rem;
+    width: 100%;
+    background-color: #7a2f2f;
+    color: white;
+    font-weight: 700;
+    padding: 12px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #6a2929;
+}
+
+.navigation-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.navigation-buttons button {
+    background: #7a2f2f;
+    color: #f0d4d4;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.navigation-buttons button:hover {
+    background-color: #6a2929;
+}
+
+/* Estilo del header de la barra lateral */
+.sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f0d4d4;
+    padding: 10px 0 30px;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .brand-text {
+    display: none;
+}
+
+/* Asegúrate de que las etiquetas <span> de los botones también respondan */
+.sidebar nav button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+}
+
+.sidebar nav button span {
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar.collapsed nav button span {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* ========================
+   Mejoras generales
+   ======================== */
+   .content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* ========================
+   Estilos para Analytics
+   ======================== */
+.analytics-section {
+    background: #f9f9f9;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.analytics-charts {
+    display: flex;
+    gap: 30px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.analytics-charts > canvas {
+    flex: 1;
+    min-width: 300px;
+}
+
+.analytics-text {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* ========================
+   Estilos para Comentarios
+   ======================== */
+.comments-section {
+    margin-bottom: 40px;
+}
+
+.comment {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid;
+}
+
+.comment.positivo {
+    border-left-color: #a0d6a0;
+}
+
+.comment.neutral {
+    border-left-color: #888;
+}
+
+.comment.negativo {
+    border-left-color: #b94a4a;
+}
+
+.sentiment-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sentiment-tag {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sentiment-tag.positivo {
+    background: #e6f4e6;
+    color: #2e7d32;
+}
+
+.sentiment-tag.neutral {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.sentiment-tag.negativo {
+    background: #fde7e7;
+    color: #c62828;
+}
+
+/* ========================
+Navegación activa
+======================== */
+nav button.active {
+    background-color: #6a2929 !important;
+}
+
+/* Centrado vertical para todas las páginas */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 80px);
+}
+
+/* Contenedor interno para centrar contenido */
+.content-center {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+/* Estilos específicos para scraping */
+.scraping-info {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.scraping-info h3 {
+    color: #7a2f2f;
+    margin-top: 0;
+    border-bottom: 2px solid #e8d0d0;
+    padding-bottom: 10px;
+}
+
+.platform-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.platform-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid #7a2f2f;
+}
+
+.platform-card h4 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.platform-card i {
+    font-size: 1.2rem;
+    color: #7a2f2f;
+}
+
+/* Mejoras responsivas */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 20px;
+        min-height: calc(100vh - 60px);
+    }
+    
+    .content-center {
+        padding: 15px;
+    }
+}
+
+/* ========================
+   ESTILOS UNIFICADOS PARA FORM-CONTAINER
+   ======================== */
+.form-container {
+    flex-grow: 1;
+    background-color: white;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    min-height: calc(100vh - 80px);
+    justify-content: flex-start; /* Alinea el contenido al inicio */
+    align-items: center; /* Centra horizontalmente */
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================
+   ESTILOS ESPECÍFICOS PARA COMENTARIOS
+   ======================== */
+.comments-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    width: 100%;
+}
+
+#comments-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+.comments-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #eee;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.comments-section h3 {
+    color: #7a2f2f;
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.comment {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-left: 4px solid;
+    transition: transform 0.2s ease;
+}
+
+.comment:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.comment p {
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.comment.positivo {
+    border-left-color: #a0d6a0;
+    background: linear-gradient(to right, #f8fff8, #ffffff);
+}
+
+.comment.neutral {
+    border-left-color: #888;
+    background: linear-gradient(to right, #f8f8f8, #ffffff);
+}
+
+.comment.negativo {
+    border-left-color: #b94a4a;
+    background: linear-gradient(to right, #fff8f8, #ffffff);
+}
+
+.sentiment-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    color: #666;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.sentiment-tag {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sentiment-tag.positivo {
+    background: #e6f4e6;
+    color: #2e7d32;
+}
+
+.sentiment-tag.neutral {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.sentiment-tag.negativo {
+    background: #fde7e7;
+    color: #c62828;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    border: 2px dashed #e0e0e0;
+    margin: 20px 0;
+    color: #777;
+}
+
+/* ========================
+   RESPONSIVIDAD
+   ======================== */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 20px 15px;
+    }
+    
+    .comments-section {
+        padding: 20px 15px;
+    }
+    
+    .comment {
+        padding: 12px;
+    }
+    
+    .sentiment-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+/* ========================
+   ESTILOS PARA SCROLLBAR
+   ======================== */
+.form-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+    background: #c4a0a0;
+    border-radius: 4px;
+}
+
+.form-container::-webkit-scrollbar-thumb:hover {
+    background: #7a2f2f;
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Scraping - Karmalytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="brand">
+                <i class="fas fa-brain"></i>
+                <span class="brand-text">Karmalytics</span>
+            </div>
+            <nav>
+                <button onclick="window.location.href='/'"><i class="fas fa-home"></i><span>Inicio</span></button>
+                <button class="active"><i class="fas fa-database"></i><span>Scraping</span></button>
+                <button onclick="goToPage('comments')"><i class="fas fa-comments"></i><span>Comentarios</span></button>
+                <button onclick="goToPage('analytics')"><i class="fas fa-chart-bar"></i><span>Analytics</span></button>
+            </nav>
+        </div>
+
+        <main class="form-container">
+            <div class="content-center">
+                <div class="scraping-info">
+                    <h3><i class="fas fa-info-circle"></i> Recopilación de Datos</h3>
+                    <p>Completa el formulario para recopilar datos de redes sociales. Los datos recolectados serán analizados para determinar el sentimiento de los comentarios.</p>
+                    
+                    <div class="platform-info">
+                        <div class="platform-card">
+                            <h4><i class="fab fa-reddit"></i> Reddit</h4>
+                            <p>Recopila comentarios de subreddits relevantes a tus palabras clave.</p>
+                        </div>
+                        <div class="platform-card">
+                            <h4><i class="fab fa-tiktok"></i> TikTok</h4>
+                            <p>Analiza comentarios de videos populares relacionados con tus términos.</p>
+                        </div>
+                        <div class="platform-card">
+                            <h4><i class="fab fa-facebook"></i> Facebook</h4>
+                            <p>Examina comentarios en publicaciones y grupos relevantes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="scrapeForm">
+                    <label for="keywords">Palabras clave (separadas por coma):</label>
+                    <input type="text" id="keywords" name="keywords" required placeholder="elon musk, openai" />
+                    <div class="form-tip">Ejemplo: tecnología, inteligencia artificial, criptomonedas</div>
+
+                    <label for="limit">Límite de posts por plataforma:</label>
+                    <input type="number" id="limit" name="limit" value="10" min="1" max="100" />
+                    <div class="form-tip">Máximo 100 posts por plataforma para un análisis rápido</div>
+
+                    <label for="platform">Red social:</label>
+                    <select id="platform" name="platform">
+                        <option value="all">Todas</option>
+                        <option value="reddit">Reddit</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="facebook">Facebook</option>
+                    </select>
+                    <div class="form-tip">Selecciona una plataforma específica o todas para análisis completo</div>
+
+                    <button type="submit">Realizar Scraping...</button>
+                </form>
+
+                <div id="resultado"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Función para navegar a otras páginas
+        function goToPage(page) {
+            const keywords = localStorage.getItem('keywords');
+            if (keywords) {
+                const keywordArray = JSON.parse(keywords);
+                window.location.href = `/${page}.html?keywords=${encodeURIComponent(keywordArray.join(','))}`;
+            } else {
+                alert('No hay palabras clave guardadas. Realiza un scraping primero.');
+            }
+        }
+
+        document.getElementById("scrapeForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const keywords = document.getElementById("keywords").value
+                .split(",")
+                .map(k => k.trim())
+                .filter(k => k.length > 0);
+            const limit = parseInt(document.getElementById("limit").value);
+            const platform = document.getElementById("platform").value;
+
+            if (keywords.length === 0) {
+                document.getElementById("resultado").innerHTML = "<p>Por favor ingresa al menos una palabra clave.</p>";
+                return;
+            }
+
+            // Guardar en localStorage
+            localStorage.setItem("keywords", JSON.stringify(keywords));
+
+            document.getElementById("resultado").innerHTML = "<p>---------Procesando scraping-----------</p>";
+
+            try {
+                const BACKEND_URL = "http://localhost:9090"; 
+                let payload = {};
+                let messages = [];
+
+                if (platform === "reddit") {
+                    payload = { keywords, limit };
+                    const res = await fetch(`${BACKEND_URL}/api/scrape/reddit`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+                    messages.push(data.message);
+                }
+
+                else if (platform === "tiktok") {
+                    for (const keyword of keywords) {
+                        const res = await fetch(`${BACKEND_URL}/api/scrape/tiktok`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ query: keyword, limit })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        messages.push(data.message);
+                    }
+                }
+                else if (platform === "facebook") {
+                    for (const keyword of keywords) {
+                        const res = await fetch(`${BACKEND_URL}/api/scrape/facebook`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ query: keyword, limit })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        messages.push(data.message);
+                    }
+                }
+                else if (platform === "all") {
+                    for (const keyword of keywords) {
+                        const res = await fetch(`${BACKEND_URL}/api/scrape/all`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ query: keyword, limit })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        messages.push(data.message);
+                    }
+                }
+
+                document.getElementById("resultado").innerHTML = messages.map(m => `<p>${m}</p>`).join("");
+
+                // Redirigir a comentarios después del scraping
+                goToPage('comments');
+            } catch (err) {
+                console.error(err);
+                document.getElementById("resultado").innerHTML = `<p style="color:red;">${err.message}</p>`;
+            }
+        });
+
+        // Comportamiento del sidebar
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.addEventListener('mouseenter', () => {
+            sidebar.classList.remove('collapsed');
+        });
+        sidebar.addEventListener('mouseleave', () => {
+            sidebar.classList.add('collapsed');
+        });
+        sidebar.classList.add('collapsed');
+    </script>
+</body>
+</html>

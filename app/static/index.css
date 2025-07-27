@@ -1,208 +1,100 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-body, html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background-color: #1a1a1a; /* gris oscuro puro para fondo general */
-    color: #ddd;
+.welcome-section {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 30px;
 }
 
-header, footer {
-    background-color: #7a2f2f; /* rojo apagado */
-    color: #f0d4d4;
-    padding: 30px 0;
+.welcome-section h1 {
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-    user-select: none;
-}
-
-header h1, footer p {
-    margin: 0;
-}
-
-header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* centra el conjunto icono + texto */
-    gap: 12px; /* espacio entre icono y texto */
-    background-color: #7a2f2f; /* rojo apagado */
-    color: #f0d4d4;
-    padding: 30px 0;
-    font-size: 2.2rem;
-    font-weight: 700;
-    user-select: none;
-}
-
-header .icon {
-    font-size: 2.8rem; /* icono más grande */
-    line-height: 1;
-    color: #b94a4a; /* rojo un poco más intenso */
-}
-
-/* Form container gris oscuro, tipo fondo Reddit dark */
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100% - 110px);
-    padding: 20px;
-    background-color: #222222; /* gris oscuro */
-}
-
-/* Formulario fondo más oscuro, sin rojo */
-form {
-    width: 100%;
-    max-width: 520px;
-    background: #2b2b2b; /* gris oscuro medio */
-    padding: 2rem 2.5rem;
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-    color: #eee;
-    transition: box-shadow 0.3s ease;
-}
-
-form:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,1);
-}
-
-form label {
-    display: block;
-    margin-top: 1.3rem;
-    font-weight: 600;
-    color: #aaa; /* gris claro para labels */
-}
-
-form input,
-form select {
-    width: 100%;
-    padding: 10px 14px;
-    margin-top: 6px;
-    border-radius: 8px;
-    border: 1.5px solid #444; /* gris oscuro para borde */
-    font-size: 1rem;
-    background: #1f1f1f; /* gris muy oscuro */
-    color: #eee;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-form input::placeholder {
-    color: #777;
-}
-
-form input:focus,
-form select:focus {
-    outline: none;
-    border-color: #888; /* gris medio */
-    box-shadow: 0 0 8px #66666688;
-    background: #2c2c2c;
-}
-
-form button {
-    margin-top: 2rem;
-    width: 100%;
-    background-color: #7a2f2f; /* rojo apagado */
-    color: white;
-    font-weight: 700;
-    padding: 14px 0;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(122, 47, 47, 0.6);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-form button:hover {
-    background-color: #6a2929; /* rojo un poco más oscuro */
-    box-shadow: 0 6px 20px rgba(106, 41, 41, 0.8);
-}
-
-.navigation-buttons {
-    margin-top: 25px;
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-}
-
-.navigation-buttons button {
-    padding: 12px 28px;
-    background: #7a2f2f; /* rojo apagado */
-    border: none;
-    color: #f0d4d4;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.navigation-buttons button:hover {
-    background-color: #6a2929;
-}
-
-/* Comentarios, Analytics containers */
-#comments-container, #analytics-container {
-    background-color: #222222;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
-    color: #eee;
-    max-width: 900px;
-    margin: 20px auto;
-}
-
-.comment {
-    border-bottom: 1px solid #444;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
-}
-
-.analytics-section {
+    color: #7a2f2f;
     margin-bottom: 30px;
 }
 
-/* Botón volver (en comentarios y analytics) */
-a > button {
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas */
+    gap: 25px;
+    margin: 40px 0;
+}
+
+.feature-card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: #7a2f2f;
+    margin-bottom: 15px;
+}
+
+.feature-card h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.get-started {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.get-started button {
     background-color: #7a2f2f;
+    color: white;
     border: none;
-    color: #f0d4d4;
-    padding: 10px 18px;
-    border-radius: 10px;
-    cursor: pointer;
+    border-radius: 8px;
+    padding: 12px 30px;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 20px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-a > button:hover {
+.get-started button:hover {
     background-color: #6a2929;
 }
 
-/* Responsive */
+/* Ajustes responsivos */
+@media (max-width: 900px) {
+    .features {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    }
+}
+
 @media (max-width: 600px) {
-    form {
-        padding: 1.5rem 1.8rem;
+    .features {
+        grid-template-columns: 1fr; /* 1 columna */
     }
+}
 
-    header {
-        font-size: 1.6rem;
+/* Solución definitiva para la tercera tarjeta */
+@media (min-width: 601px) and (max-width: 900px) {
+    .features {
+        grid-template-areas: 
+            "card1 card2"
+            "card3 card3";
     }
-
-    .navigation-buttons {
-        flex-direction: column;
-        gap: 12px;
+    
+    .feature-card:nth-child(1) {
+        grid-area: card1;
     }
-
-    .navigation-buttons button {
+    
+    .feature-card:nth-child(2) {
+        grid-area: card2;
+    }
+    
+    .feature-card:nth-child(3) {
+        grid-area: card3;
+        max-width: none;
         width: 100%;
-    }
-
-    #comments-container, #analytics-container {
-        padding: 15px;
-        margin: 15px 10px;
     }
 }
